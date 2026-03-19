@@ -7,9 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class NftResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     */
     public function toArray(Request $request): array
     {
         $onChainMetadata = data_get($this->resource, 'onchain_metadata', []);
@@ -29,9 +26,6 @@ class NftResource extends JsonResource
         ];
     }
 
-    /**
-     * Resolve a canonical image URL.
-     */
     protected function resolveImageUrl($onChainMetadata, $assetId): ?string
     {
         // Preferred: nftcdn.io canonical URL if assetId is present
@@ -55,17 +49,11 @@ class NftResource extends JsonResource
         return $image;
     }
 
-    /**
-     * Normalize metadata for consistency.
-     */
     protected function normalizeMetadata($onChain, $offChain): array
     {
         return array_merge($offChain ?? [], $onChain ?? []);
     }
 
-    /**
-     * Extract traits/attributes from metadata.
-     */
     protected function extractTraits($metadata): array
     {
         $traits = [];

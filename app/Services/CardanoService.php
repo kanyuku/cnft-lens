@@ -16,9 +16,6 @@ class CardanoService
         $this->baseUrl = config('cardano.blockfrost.base_url');
     }
 
-    /**
-     * Get a paginated list of assets for a given policy ID.
-     */
     public function getAssetsByPolicy(string $policyId, int $page = 1, int $count = 100)
     {
         $response = Http::withHeaders([
@@ -36,9 +33,6 @@ class CardanoService
         return $response->json();
     }
 
-    /**
-     * Get full details for a specific asset.
-     */
     public function getAssetDetails(string $assetId)
     {
         $response = Http::withHeaders([
@@ -53,9 +47,6 @@ class CardanoService
         return $response->json();
     }
 
-    /**
-     * Get the transaction history for an asset.
-     */
     public function getAssetHistory(string $assetId)
     {
         $response = Http::withHeaders([

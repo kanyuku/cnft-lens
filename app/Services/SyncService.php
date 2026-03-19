@@ -15,9 +15,6 @@ class SyncService
         $this->cardano = $cardano;
     }
 
-    /**
-     * Sync all assets and traits for a given policy ID.
-     */
     public function syncPolicy(string $policyId): void
     {
         $page = 1;
@@ -33,7 +30,6 @@ class SyncService
             foreach ($assets as $assetInfo) {
                 $assetId = $assetInfo['asset'];
 
-                // Skip if already synced (naive check)
                 if (Asset::where('asset_id', $assetId)->exists()) {
                     continue;
                 }
@@ -45,9 +41,6 @@ class SyncService
         } while (count($assets) === $count);
     }
 
-    /**
-     * Sync detailed info for a specific asset.
-     */
     public function syncAsset(string $assetId): ?Asset
     {
         $details = $this->cardano->getAssetDetails($assetId);
@@ -76,7 +69,6 @@ class SyncService
 
     protected function syncTraits(Asset $asset, array $metadata): void
     {
-        // First clear existing traits
         $asset->traits()->delete();
 
         $traits = $this->extractTraits($metadata);
