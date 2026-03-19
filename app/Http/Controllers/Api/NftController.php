@@ -46,7 +46,7 @@ class NftController extends Controller
 
         $cacheKey = "policy.{$policyId}.{$trait}.{$value}.{$page}.{$count}";
 
-        return Cache::remember($cacheKey, now()->addHour(), function () use ($policyId, $trait, $value, $request) {
+        return Cache::remember($cacheKey, now()->addHour(), function () use ($policyId, $trait, $value, $page, $count, $request) {
             $query = Asset::where('policy_id', $policyId);
 
             if ($trait && $value) {
