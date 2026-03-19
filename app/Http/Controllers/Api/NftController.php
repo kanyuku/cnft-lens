@@ -73,11 +73,6 @@ class NftController extends Controller
         });
     }
 
-    /**
-     * Get Asset Details
-     * 
-     * Returns full details for a specific NFT, including normalized metadata and image URLs.
-     */
     public function asset(string $assetId)
     {
         return Cache::remember("asset.{$assetId}", now()->addDay(), function () use ($assetId) {
@@ -95,11 +90,6 @@ class NftController extends Controller
         });
     }
 
-    /**
-     * Get Asset History
-     * 
-     * Returns transaction history for the asset, flagging potential sales.
-     */
     public function history(string $assetId)
     {
         return Cache::remember("history.{$assetId}", now()->addHour(), function () use ($assetId) {
@@ -121,11 +111,6 @@ class NftController extends Controller
         });
     }
 
-    /**
-     * Get Collection Stats
-     * 
-     * Returns basic statistics like total items and trait rarity hints.
-     */
     public function stats(string $policyId)
     {
         return Cache::remember("stats.{$policyId}", now()->addHours(6), function () use ($policyId) {
