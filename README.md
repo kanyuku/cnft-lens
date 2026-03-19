@@ -1,51 +1,101 @@
-# CNFT Lens — A lightweight, Laravel-native REST API
+# 💠 CNFT Lens
+### A lightweight, Laravel-native REST API for Cardano NFTs
 
-CNFT Lens turns raw Cardano data into clean, developer-friendly NFT responses for PHP teams (particularly aimed at Kenya/Africa).
-
-## PROJECT MISSION
-
-- **Purpose**: Provide fast, simple endpoints that return enriched Cardano NFT data (clean image URLs, trait-aware filtering, cached responses, transaction history) so PHP developers can integrate Cardano NFTs without glue code or running a node.
-- **X-factor**: Instant developer joy — usable responses out of the box so teams can build viewers, analytics, or micro-frontends within minutes.
-
-> "I’m building CNFT Lens to make Cardano NFTs effortless for PHP developers — one clear endpoint at a time."
+CNFT Lens turns raw Cardano data into clean, developer-friendly NFT responses for PHP teams (particularly aimed at Kenya/Africa). Integrate Cardano NFTs into your viewers, analytics, or micro-frontends within minutes.
 
 ---
 
-## CORE ENDPOINTS
+## 🎯 Project Mission
+- **Purpose**: Provide fast, simple endpoints that return enriched Cardano NFT data (clean image URLs, trait-aware filtering, cached responses, transaction history) so PHP developers can integrate Cardano NFTs without glue code or running a node.
+- **X-factor**: **Instant developer joy** — usable responses out of the box.
 
-- `GET /api/nfts/policy/{policy_id}`: Paginated list of NFTs in a collection.
-- `GET /api/nfts/policy/{policy_id}?trait={trait}&value={value}`: Server-side trait filtering.
-- `GET /api/nfts/asset/{asset_id}`: Full NFT details (normalized metadata, canonical image URL, CIP-25/CIP-68 support).
-- `GET /api/nfts/asset/{asset_id}/history`: Transaction history (sales vs transfers).
+> *"I’m building CNFT Lens to make Cardano NFTs effortless for PHP developers — one clear endpoint at a time."*
 
-## TECHNICAL STACK
+---
 
-- **Laravel**: Services, API Resources, Caching, Rate Limiting, Sanctum.
-- **Cardano SDK**: Blockfrost API integration.
-- **Metadata**: Support for CIP-25 and CIP-68 standards.
-- **Images**: Canonical mapping via [nftcdn.io](https://nftcdn.io).
+## ✨ Features
 
-## LOCAL SETUP (PHASE 1)
+- 🖼️ **Canonical Image Resolution**: Automatically maps raw metadata to premium [nftcdn.io](https://nftcdn.io) URLs.
+- 🔍 **Trait Filtering**: Server-side filtering by attributes (e.g., `Background=Blue`).
+- ⚡ **High-Performance Caching**: Layered caching (1h-24h) to protect against Blockfrost rate limits.
+- 🛡️ **Normalized Metadata**: Consistent CIP-25 and CIP-68 support.
+- 📊 **Collection Stats**: Trait rarity analysis and item counts.
+- 📖 **Auto-Generated Docs**: Scribe integration for instant API documentation and Postman exports.
+
+---
+
+## 🛠️ Local Setup
+
+### Prerequisites
+- PHP 8.3+
+- Composer
+- SQLite (default)
+- [Blockfrost API Key](https://blockfrost.io/)
+
+### Installation
 
 ```bash
+# Clone and enter the directory
+git clone https://github.com/kanyuku/cnft-lens.git
 cd cnft-lens
+
+# Install dependencies
 composer install
+
+# Environment configuration
 cp .env.example .env
 php artisan key:generate
-php artisan serve
+
+# Database setup
+touch database/database.sqlite
+php artisan migrate
+```
+
+### Configuration
+Update your `.env` with your Blockfrost credentials:
+```env
+BLOCKFROST_PROJECT_ID=mainnet_your_key_here
+BLOCKFROST_NETWORK=mainnet
 ```
 
 ---
 
-## DEVELOPMENT PHASES
+## 📡 Core Endpoints
 
-- **Phase 1 (MV API)**: Basic endpoints with Blockfrost-backed data.
-- **Phase 2 (Trait filtering)**: Server-side trait parsing and pagination.
-- **Phase 3 (Caching & history)**: Performance layer and transaction logic.
-- **Phase 4 (Extras)**: Collection stats, rarity, and documentation.
+### 📦 Collections
+- `GET /api/nfts/policy/{policy_id}`: Paginated list of NFTs.
+- `GET /api/nfts/policy/{policy_id}?trait=Eyes&value=Red`: Filtered asset list.
+- `GET /api/nfts/policy/{policy_id}/stats`: Rarity hints and collection aggregates.
 
-## NON-GOALS
+### 🖼️ Assets
+- `GET /api/nfts/asset/{asset_id}`: Full details, canonical image URL, and normalized traits.
+- `GET /api/nfts/asset/{asset_id}/history`: Transaction history for the asset.
 
-- Do not build a full marketplace, minting tools, or multi-chain support.
-- Do not run a Cardano node.
-- Avoid over-engineering — prefer simple, well-tested code.
+---
+
+## 🔄 Syncing Collections
+
+To enable **trait filtering** and **rarity statistics**, you must sync a collection to your local database:
+
+```bash
+php artisan nfts:sync {policy_id}
+```
+*Note: Large collections may take a few minutes depending on your Blockfrost plan.*
+
+---
+
+## 🧪 Documentation & Testing
+
+- **API Docs**: Visit `/docs` on your local server to view auto-generated documentation.
+- **Testing**: Run `php artisan test` to verify the API health.
+
+---
+
+## 🌍 Non-Goals
+- No full marketplace or minting tools.
+- No local Cardano node required.
+- Minimalist, well-tested code over complex abstractions.
+
+---
+
+Built for the Cardano community in Kenya 🇰🇪.
