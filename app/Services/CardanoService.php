@@ -18,9 +18,12 @@ class CardanoService
 
     public function getAssetsByPolicy(string $policyId, int $page = 1, int $count = 100)
     {
+        $url = "{$this->baseUrl}/assets/policy/{$policyId}";
+        Log::info("Fetching assets from: {$url} with page={$page}");
+
         $response = Http::withHeaders([
             'project_id' => $this->projectId,
-        ])->get("{$this->baseUrl}/assets/policy/{$policyId}", [
+        ])->get($url, [
                     'page' => $page,
                     'count' => $count,
                 ]);
@@ -30,7 +33,10 @@ class CardanoService
             return null;
         }
 
-        return $response->json();
+        $data = $response->json();
+        Log::info("Found " . count($data) . " assets.");
+
+        return $data;
     }
 
     public function getAssetDetails(string $assetId)

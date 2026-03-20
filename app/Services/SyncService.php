@@ -98,11 +98,25 @@ class SyncService
 
         foreach ($traitKeys as $key) {
             if (isset($metadata[$key]) && is_array($metadata[$key])) {
-                return $metadata[$key];
+                $rawTraits = $metadata[$key];
+
+                // If it's a list of objects (common in some standards), flatten it
+                if (isset($rawTraits[0]) && is_array($rawTraits[0])) {
+                    foreach ($rawTraits as $item) {
+                        if (isset($item['trait_type']) && isset($item['value'])) {
+                            $traits[$item['trait_type']] = $item['value'];
+                        }
+                    }
+                    if (!empty($traits))
+                        return $traits;
+                }
+
+                return $rawTraits;
             }
         }
 
-        $standardKeys = ['name', 'image', 'mediaType', 'description', 'files'];
+        // Fallback: extract everything that isn't a standard key
+        $standardKeys = ['name', 'image', 'mediaType', 'description', 'files', 'version'];
         foreach ($metadata as $key => $value) {
             if (!in_array($key, $standardKeys) && !is_array($value)) {
                 $traits[$key] = $value;
